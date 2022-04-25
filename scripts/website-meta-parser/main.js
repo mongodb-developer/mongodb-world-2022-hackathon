@@ -34,12 +34,9 @@ const mongoClient = new MongoClient(process.env.ATLAS_URI);
             .limit(50)
             .toArray();
 
-        // console.log(newsWithoutInfo);
-
         for(let i = 0; i < newsWithoutInfo.length; i++) {
             let result = await parser(newsWithoutInfo[i].SourceURL);
             let metaData = { meta: result.meta, og: result.og };
-            // console.log(metaData);
             await collection.updateOne(
                 {
                     "_id": newsWithoutInfo[i]._id
