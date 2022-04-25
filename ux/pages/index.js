@@ -5,7 +5,7 @@ import Category from "../components/Category";
 import Container from "../components/Container";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import Hero from "../components/Hero";
+import Mapbox from "../components/Mapbox";
 import Pagination from "../components/Pagination";
 import Events from "../components/Events";
 
@@ -40,7 +40,7 @@ export default function Home({ events, mapboxAccessToken, heatmapData }) {
       <div className="bg-white w-full min-h-screen">
         <Header />
         <Container>
-          <Hero mapboxAccessToken={mapboxAccessToken} heatmapData={heatmapData} />
+          <Mapbox mapboxAccessToken={mapboxAccessToken} heatmapData={heatmapData} />
           {/* <Category
             category="Recent Events"
             // categories={categories}
@@ -64,7 +64,7 @@ export async function getServerSideProps(context) {
         var events = await collection.find({ "Info": { "$exists": true }}).limit(100).toArray();
         var heatmap = await collection.aggregate([
             {
-                "$limit": 1000
+                "$limit": 3000
             },
             {
                 "$project": {
@@ -90,9 +90,7 @@ export async function getServerSideProps(context) {
                 }
             }
         ]).toArray();
-
-        console.log(heatmap[0]);
-
+        
         // Hack for removing duplicate news items client side
         events = events.reduce((unique, o) => {
             if(!unique.some(obj => obj.SourceURL === o.SourceURL)) {

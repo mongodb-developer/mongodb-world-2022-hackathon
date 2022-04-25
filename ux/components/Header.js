@@ -3,20 +3,18 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import * as Realm from "realm-web";
 import {
-  ShoppingCartIcon,
   MenuIcon,
   SearchIcon,
 } from "@heroicons/react/outline";
-import Cart from "./Cart";
 
 const Header = () => {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [autoComplete, setAutoComplete] = useState([]);
 
-  useEffect(async () => {
+  useEffect( () => {
+      (async () => {
     if (searchTerm.length) {
       // add your Realm App Id to the .env.local file
       const REALM_APP_ID = process.env.NEXT_PUBLIC_REALM_APP_ID;
@@ -27,6 +25,7 @@ const Header = () => {
         const searchAutoComplete = await user.functions.searchAutoComplete(
           searchTerm
         );
+        console.log(searchAutoComplete);
         setAutoComplete(() => searchAutoComplete);
       } catch (error) {
         console.error(error);
@@ -34,22 +33,23 @@ const Header = () => {
     } else {
       setAutoComplete([]);
     }
+      })();
   }, [searchTerm]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     setSearchTerm("");
-    router.push({
-      pathname: `/search/${searchTerm}`,
-    });
+    // router.push({
+    //   pathname: `/search/${searchTerm}`,
+    // });
   };
 
   const handleSelect = (id) => {
     setSearchTerm("");
-    router.push({
-      pathname: `/products/${id}`,
-    });
+    // router.push({
+    //   pathname: `/products/${id}`,
+    // });
   };
 
   return (
@@ -62,13 +62,7 @@ const Header = () => {
                 GDELT Hackathon UX
               </div>
             </Link>
-            {/* <div className="flex items-center justify-end w-full">
-              <button className="text-gray-600 focus:outline-none mx-4 sm:mx-0">
-                <ShoppingCartIcon
-                  onClick={() => setIsCartOpen(!isCartOpen)}
-                  className="h-5 w-5"
-                />
-              </button>
+            <div className="flex items-center justify-end w-full">
 
               <div className="flex sm:hidden">
                 <button
@@ -80,7 +74,7 @@ const Header = () => {
                   <MenuIcon className="h-5 w-5" />
                 </button>
               </div>
-            </div> */}
+            </div>
           </div>
 
           <nav
@@ -120,7 +114,7 @@ const Header = () => {
                 value={searchTerm}
               />
             </form>
-            {autoComplete.length > 0 && (
+            {/* {autoComplete.length > 0 && (
               <ul className="absolute inset-x-0 top-full bg-green-200 border border-green-500 rounded-md z-20">
                 {autoComplete.map((item) => {
                   return (
@@ -129,16 +123,15 @@ const Header = () => {
                       className="px-4 py-2 hover:bg-green-300 cursor-pointer"
                       onClick={() => handleSelect(item._id)}
                     >
-                      {item.name}
+                      {item.Title}
                     </li>
                   );
                 })}
               </ul>
-            )}
+            )} */}
           </div>
         </div>
       </header>
-      <Cart isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
     </>
   );
 };

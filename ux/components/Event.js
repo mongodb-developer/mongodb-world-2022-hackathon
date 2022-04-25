@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCartIcon } from "@heroicons/react/outline";
 
 const Event = ({ event }) => {
   return (
@@ -15,9 +14,6 @@ const Event = ({ event }) => {
             objectFit="cover"
             className="absolute z-0"
           />
-          {/* <button className="absolute z-10 p-2 rounded-full bg-green-600 text-white mx-5 -mb-4 hover:bg-green-500 focus:outline-none focus:bg-green-500">
-            <ShoppingCartIcon className="w-5 h-5" />
-          </button> */}
         </div>
         <div className="px-5 py-3">
           <h3 className="text-gray-700">{event.Info?.meta.title}</h3>

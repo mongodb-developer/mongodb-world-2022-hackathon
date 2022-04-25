@@ -7,7 +7,7 @@ import Container from "../../../components/Container";
 import Footer from "../../../components/Footer";
 import Header from "../../../components/Header";
 import Pagination from "../../../components/Pagination";
-import Products from "../../../components/Products";
+import Events from "../../../components/Events";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
