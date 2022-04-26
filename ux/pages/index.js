@@ -60,7 +60,15 @@ export async function getServerSideProps(context) {
         const { database } = await connectToDatabase();
         const collection = database.collection(process.env.NEXT_ATLAS_COLLECTION);
 
-        var events = await collection.find({ "Info": { "$exists": true }}).limit(100).toArray();
+        var events = await collection.find({ "Info": { "$exists": true }}).project({ 
+            "_id": 1,
+            "SourceURL": 1, 
+            "Title": '$Info.meta.title',
+            "Description": '$Info.meta.description',
+            "Image": "$Info.og.image",
+            "Day": 1
+        }).limit(100).toArray();
+
         var heatmap = await collection.aggregate([
             {
                 "$limit": 3000

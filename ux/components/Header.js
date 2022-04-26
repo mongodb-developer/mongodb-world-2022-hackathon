@@ -30,16 +30,16 @@ const Header = () => {
     e.preventDefault();
 
     setSearchTerm("");
-    // router.push({
-    //   pathname: `/search/${searchTerm}`,
-    // });
+    router.push({
+      pathname: `/search/${searchTerm}`,
+    });
   };
 
-  const handleSelect = (id) => {
+  const handleSelect = (sourceURL) => {
     setSearchTerm("");
-    // router.push({
-    //   pathname: `/products/${id}`,
-    // });
+    router.push({
+        pathname: sourceURL
+    });
   };
 
   return (
@@ -111,7 +111,7 @@ const Header = () => {
                     <li
                       key={item._id}
                       className="px-4 py-2 hover:bg-green-300 cursor-pointer"
-                      onClick={() => handleSelect(item._id)}
+                      onClick={() => handleSelect(item.SourceURL)}
                     >
                       {item.Title}
                     </li>

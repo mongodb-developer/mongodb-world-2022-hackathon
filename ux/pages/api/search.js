@@ -21,7 +21,9 @@ export default async function search(request, response) {
                     '_id': 1,
                     'SourceURL': 1,
                     'Title': '$Info.meta.title',
-                    'Description': '$Info.meta.description'
+                    'Description': '$Info.meta.description',
+                    "Image": "$Info.og.image",
+                    "Day": 1
                 }
             }
         ]

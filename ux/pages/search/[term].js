@@ -7,26 +7,23 @@ import Container from "../../components/Container";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import Pagination from "../../components/Pagination";
-import Products from "../../components/Events";
+import Events from "../../components/Events";
 
 export default function Home() {
-  const [products, setProducts] = useState([]);
+  const [events, setEvents] = useState([]);
   const { query } = useRouter();
 
-  useEffect(async () => {
-    if (query.term) {
-      // add your Realm App Id to the .env.local file
-      const REALM_APP_ID = process.env.NEXT_PUBLIC_REALM_APP_ID;
-      const app = new Realm.App({ id: REALM_APP_ID });
-      const credentials = Realm.Credentials.anonymous();
-      try {
-        const user = await app.logIn(credentials);
-        const searchProducts = await user.functions.searchProducts(query.term);
-        setProducts(() => searchProducts);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+  useEffect(() => {
+    (async () => {
+        if (query.term) {
+            try {
+                const searchEvents = await fetch(`/api/search?query=${query.term}`).then(response => response.json());
+                setEvents(() => searchEvents);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    })();
   }, [query]);
 
   return (
@@ -38,11 +35,11 @@ export default function Home() {
       <div className="bg-white w-full min-h-screen">
         <Header />
         <Container>
-          <Category
-            category="All Products"
-            categoryCount={`${products.length} Products`}
-          />
-          <Products products={products} />
+          {/* <Category
+            category="All Events"
+            categoryCount={`${events.length} Events`}
+          /> */}
+          <Events events={events} />
           <Pagination />
         </Container>
         <Footer />
