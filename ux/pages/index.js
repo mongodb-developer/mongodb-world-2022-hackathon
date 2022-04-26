@@ -11,7 +11,7 @@ import Events from "../components/Events";
 
 import { connectToDatabase } from "../lib/mongodb";
 
-export default function Home({ events, mapboxAccessToken, heatmapData }) {
+export default function Home({ events, mapboxAccessToken, categories, heatmapData }) {
 //   const [products, setProducts] = useState([]);
 //   const [categories, setCategories] = useState([]);
 
@@ -41,11 +41,11 @@ export default function Home({ events, mapboxAccessToken, heatmapData }) {
         <Header />
         <Container>
           <Mapbox mapboxAccessToken={mapboxAccessToken} heatmapData={heatmapData} />
-          {/* <Category
+          <Category
             category="Recent Events"
-            // categories={categories}
-            productCount={`${events.length} Products`}
-          /> */}
+            categories={categories}
+            productCount={`${events.length} Events`}
+          />
           <Events events={events} />
           {/* <Pagination /> */}
         </Container>
@@ -68,6 +68,22 @@ export async function getServerSideProps(context) {
             "Image": "$Info.og.image",
             "Day": 1
         }).limit(100).toArray();
+
+        var categories = await collection.aggregate(
+            [
+                {
+                    "$limit": 1000
+                },
+                {
+                    '$group': {
+                        '_id': 1,
+                        'Categories': {
+                            '$addToSet': '$EventCode'
+                        }
+                    }
+                }
+            ]
+        ).toArray();
 
         var heatmap = await collection.aggregate([
             {
@@ -111,6 +127,7 @@ export async function getServerSideProps(context) {
                 isConnected: true,
                 mapboxAccessToken: process.env.MAPBOX_ACCESS_TOKEN,
                 events: JSON.parse(JSON.stringify(events)),
+                categories: JSON.parse(JSON.stringify(categories[0].Categories)),
                 heatmapData: JSON.parse(JSON.stringify(heatmap[0])),
             },
         };

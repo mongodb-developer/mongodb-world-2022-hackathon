@@ -52,7 +52,7 @@ export default function Home() {
             categories={categories}
             productCount={`${products.length} Products`}
           />
-          <Products products={products} />
+          <Events events={events} />
           <Pagination />
         </Container>
         <Footer />

@@ -5,7 +5,7 @@ const Category = ({ category, categories, productCount }) => {
   const router = useRouter();
   const handleSelect = (cat) => {
     router.push({
-      pathname: `/products/category/${cat}`,
+      pathname: `/events/category/${cat}`,
     });
   };
 
