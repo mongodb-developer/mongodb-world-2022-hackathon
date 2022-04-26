@@ -9,7 +9,7 @@ import Mapbox from "../components/Mapbox";
 import Pagination from "../components/Pagination";
 import Events from "../components/Events";
 
-import clientPromise from "../lib/mongodb";
+import { connectToDatabase } from "../lib/mongodb";
 
 export default function Home({ events, mapboxAccessToken, heatmapData }) {
 //   const [products, setProducts] = useState([]);
@@ -57,9 +57,8 @@ export default function Home({ events, mapboxAccessToken, heatmapData }) {
 
 export async function getServerSideProps(context) {
     try {
-        const client = await clientPromise;
-        const db = client.db(process.env.NEXT_ATLAS_DATABASE);
-        const collection = db.collection(process.env.NEXT_ATLAS_COLLECTION);
+        const { database } = await connectToDatabase();
+        const collection = database.collection(process.env.NEXT_ATLAS_COLLECTION);
 
         var events = await collection.find({ "Info": { "$exists": true }}).limit(100).toArray();
         var heatmap = await collection.aggregate([

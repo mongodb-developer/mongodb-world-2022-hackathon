@@ -13,27 +13,17 @@ const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [autoComplete, setAutoComplete] = useState([]);
 
-  useEffect( () => {
-      (async () => {
-    if (searchTerm.length) {
-      // add your Realm App Id to the .env.local file
-      const REALM_APP_ID = process.env.NEXT_PUBLIC_REALM_APP_ID;
-      const app = new Realm.App({ id: REALM_APP_ID });
-      const credentials = Realm.Credentials.anonymous();
-      try {
-        const user = await app.logIn(credentials);
-        const searchAutoComplete = await user.functions.searchAutoComplete(
-          searchTerm
-        );
-        console.log(searchAutoComplete);
-        setAutoComplete(() => searchAutoComplete);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      setAutoComplete([]);
-    }
-      })();
+  useEffect(() => {
+    (async () => {
+        if(searchTerm.length > 3) {
+            try {
+                const searchAutoComplete = await fetch(`/api/search?query=${searchTerm}`).then(response => response.json());
+                setAutoComplete(() => searchAutoComplete);
+            } catch(e) {
+                console.error(e);
+            }
+        }
+    })();
   }, [searchTerm]);
 
   const handleSubmit = (e) => {
@@ -114,7 +104,7 @@ const Header = () => {
                 value={searchTerm}
               />
             </form>
-            {/* {autoComplete.length > 0 && (
+            {autoComplete.length > 0 && (
               <ul className="absolute inset-x-0 top-full bg-green-200 border border-green-500 rounded-md z-20">
                 {autoComplete.map((item) => {
                   return (
@@ -128,7 +118,7 @@ const Header = () => {
                   );
                 })}
               </ul>
-            )} */}
+            )}
           </div>
         </div>
       </header>
