@@ -23,7 +23,8 @@ const mongoClient = new MongoClient(process.env.ATLAS_URI);
                         },
                         "SourceURL": {
                             "$exists": true
-                        }
+                        },
+                        "Year": 2022
                     }
                 )
                 .project(
@@ -32,7 +33,7 @@ const mongoClient = new MongoClient(process.env.ATLAS_URI);
                         "SourceURL": 1 
                     }
                 )
-                .limit(50)
+                .limit(100)
                 .toArray();
 
             if(newsWithoutInfo.length == 0) return;
@@ -45,12 +46,6 @@ const mongoClient = new MongoClient(process.env.ATLAS_URI);
                 documentsToPopulate.push(
                     parser(newsWithoutInfo[i].SourceURL)
                         .then(result => {
-                            // return {
-                            //     "_id": newsWithoutInfo[i]._id,
-                            //     "SourceURL": newsWithoutInfo[i].SourceURL,
-                            //     "meta": result.meta,
-                            //     "og": result.og
-                            // };
                             return collection.updateOne(
                                 {
                                     "_id": newsWithoutInfo[i]._id
@@ -68,25 +63,15 @@ const mongoClient = new MongoClient(process.env.ATLAS_URI);
                             if(error.response && error.response.status) {
                                 if(![403, 404].includes(error.response.status)) {
                                     console.error(error.message);
-                                    // collection.updateOne(
-                                    //     {
-                                    //         "_id": newsWithoutInfo[i]._id
-                                    //     },
-                                    //     {
-                                    //         "$set": {
-                                    //             "IsSourceURLDead": true
-                                    //         }
-                                    //     }
-                                    // )
                                 }
+                            } else {
+                                console.error(error.message);
                             }
                         })
                 );
             }
 
-            let result = await Promise.all(documentsToPopulate);
-
-            // console.log(result);
+            await Promise.all(documentsToPopulate);
 
             console.log(`Batch ${j} Updated`);
         }

@@ -60,14 +60,22 @@ export async function getServerSideProps(context) {
         const { database } = await connectToDatabase();
         const collection = database.collection(process.env.NEXT_ATLAS_COLLECTION);
 
-        var events = await collection.find({ "Info": { "$exists": true }}).project({ 
+        var events = await collection
+        .find(
+            { 
+                "Info": { "$exists": true },
+                "Year": 2022
+            }
+        )
+        .project({ 
             "_id": 1,
             "SourceURL": 1, 
             "Title": '$Info.meta.title',
             "Description": '$Info.meta.description',
             "Image": "$Info.og.image",
             "Day": 1
-        }).limit(100).toArray();
+        })
+        .limit(100).toArray();
 
         var categories = await collection.aggregate(
             [
