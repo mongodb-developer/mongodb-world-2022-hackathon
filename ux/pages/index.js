@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import * as Realm from "realm-web";
 import Category from "../components/Category";
 import Container from "../components/Container";
@@ -11,25 +12,23 @@ import Events from "../components/Events";
 
 import { connectToDatabase } from "../lib/mongodb";
 
-export default function Home({ events, mapboxAccessToken, categories, heatmapData }) {
-//   const [products, setProducts] = useState([]);
-//   const [categories, setCategories] = useState([]);
+export default function Home({ mapboxAccessToken, categories, heatmapData }) {
 
-//   useEffect(async () => {
-//     // add your Realm App Id to the .env.local file
-//     const REALM_APP_ID = process.env.NEXT_PUBLIC_REALM_APP_ID;
-//     const app = new Realm.App({ id: REALM_APP_ID });
-//     const credentials = Realm.Credentials.anonymous();
-//     try {
-//       const user = await app.logIn(credentials);
-//       const allProducts = await user.functions.getAllProducts();
-//       setProducts(() => allProducts);
-//       const uniqueCategories = await user.functions.getUniqueCategories();
-//       setCategories(() => uniqueCategories);
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   }, []);
+    const { query } = useRouter();
+
+    const [events, setEvents] = useState([]);
+    const [page, setPage] = useState(parseInt(query.page) || 0);
+    const [limit, setLimit] = useState(parseInt(query.limit) || 25);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                setEvents(await fetch(`/api/news?page=${page}&limit=${limit}`).then(response => response.json()));
+            } catch (e) {
+                console.error(e);
+            }
+        })();
+    }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
@@ -47,7 +46,7 @@ export default function Home({ events, mapboxAccessToken, categories, heatmapDat
             productCount={`${events.length} Events`}
           />
           <Events events={events} />
-          {/* <Pagination /> */}
+          <Pagination page={page} limit={limit} />
         </Container>
         <Footer />
       </div>
@@ -59,23 +58,6 @@ export async function getServerSideProps(context) {
     try {
         const { database } = await connectToDatabase();
         const collection = database.collection(process.env.NEXT_ATLAS_COLLECTION);
-
-        var events = await collection
-        .find(
-            { 
-                "Info": { "$exists": true },
-                "Year": 2022
-            }
-        )
-        .project({ 
-            "_id": 1,
-            "SourceURL": 1, 
-            "Title": '$Info.meta.title',
-            "Description": '$Info.meta.description',
-            "Image": "$Info.og.image",
-            "Day": 1
-        })
-        .limit(100).toArray();
 
         var categories = await collection.aggregate(
             [
@@ -123,18 +105,17 @@ export async function getServerSideProps(context) {
         ]).toArray();
         
         // Hack for removing duplicate news items client side
-        events = events.reduce((unique, o) => {
-            if(!unique.some(obj => obj.SourceURL === o.SourceURL)) {
-                unique.push(o);
-            }
-            return unique;
-        }, []);
+        // events = events.reduce((unique, o) => {
+        //     if(!unique.some(obj => obj.SourceURL === o.SourceURL)) {
+        //         unique.push(o);
+        //     }
+        //     return unique;
+        // }, []);
 
         return {
             props: {
                 isConnected: true,
                 mapboxAccessToken: process.env.MAPBOX_ACCESS_TOKEN,
-                events: JSON.parse(JSON.stringify(events)),
                 categories: JSON.parse(JSON.stringify(categories[0].Categories)),
                 heatmapData: JSON.parse(JSON.stringify(heatmap[0])),
             },
