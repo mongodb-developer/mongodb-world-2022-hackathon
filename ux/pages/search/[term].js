@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import * as Realm from "realm-web";
 import Category from "../../components/Category";
 import Container from "../../components/Container";
 import Footer from "../../components/Footer";
@@ -35,10 +34,10 @@ export default function Home() {
       <div className="bg-white w-full min-h-screen">
         <Header />
         <Container>
-          {/* <Category
-            category="All Events"
-            categoryCount={`${events.length} Events`}
-          /> */}
+          <Category
+            category={query.term}
+            eventCount={`${events.length} Events`}
+          />
           <Events events={events} />
           <Pagination />
         </Container>

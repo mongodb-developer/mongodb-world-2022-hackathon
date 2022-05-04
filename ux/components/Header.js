@@ -84,9 +84,9 @@ const Header = () => {
               </div>
               <a
                 className="mt-3 text-gray-600 hover:underline sm:mx-3 sm:mt-0"
-                href="#"
+                              href="https://github.com/mongodb-developer/mongodb-world-2022-hackathon"
               >
-                About
+                Source Code
               </a>
             </div>
           </nav>

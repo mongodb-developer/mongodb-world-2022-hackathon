@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 
-const Category = ({ category, categories, productCount }) => {
+const Category = ({ category, categories, eventCount }) => {
   const router = useRouter();
   const handleSelect = (cat) => {
     router.push({
@@ -16,7 +16,7 @@ const Category = ({ category, categories, productCount }) => {
           <h3 className="text-gray-700 text-2xl font-medium block mt-8">
             {category}
           </h3>
-          <span className="mt-3 text-sm text-gray-500">{productCount}</span>
+          <span className="mt-3 text-sm text-gray-500">{eventCount}</span>
         </div>
         <div className="group inline-block self-center relative">
           <button className="outline-none focus:outline-none border px-3 py-1 bg-white rounded-md flex items-center min-w-32">

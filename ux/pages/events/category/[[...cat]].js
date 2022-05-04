@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import * as Realm from "realm-web";
 import Category from "../../../components/Category";
 import Container from "../../../components/Container";
 import Footer from "../../../components/Footer";
@@ -10,38 +9,29 @@ import Pagination from "../../../components/Pagination";
 import Events from "../../../components/Events";
 
 export default function Home() {
-  const [products, setProducts] = useState([]);
+  const [events, setEvents] = useState([]);
   const [categories, setCategories] = useState([]);
   const [categoryName, setCategoryName] = useState("");
   const { query } = useRouter();
 
-  useEffect(async () => {
-    // add your Realm App Id to the .env.local file
-    const REALM_APP_ID = process.env.NEXT_PUBLIC_REALM_APP_ID;
-    const app = new Realm.App({ id: REALM_APP_ID });
-    const credentials = Realm.Credentials.anonymous();
-    try {
-      const user = await app.logIn(credentials);
-      let getProducts;
-      if (query.cat) {
-        getProducts = await user.functions.getProductsByCategory(query.cat);
-        setCategoryName(() => query.cat);
-      } else {
-        getProducts = await user.functions.getAllProducts();
-        setCategoryName(() => "All Products");
-      }
-      setProducts(() => getProducts);
-      const uniqueCategories = await user.functions.getUniqueCategories();
-      setCategories(() => uniqueCategories);
-    } catch (error) {
-      console.error(error);
-    }
+  useEffect(() => {
+      (async () => {
+          if (query.cat) {
+              setCategoryName(query.cat[0]);
+              try {
+                  const eventsByCategory = await fetch(`/api/news-by-category?code=${query.cat[0]}`).then(response => response.json());
+                  setEvents(() => eventsByCategory);
+              } catch (e) {
+                  console.error(e);
+              }
+          }
+      })();
   }, [query]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <Head>
-        <title>Create Next App</title>
+        <title>GDELT Hackathon UX</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="bg-white w-full min-h-screen">
@@ -50,7 +40,7 @@ export default function Home() {
           <Category
             category={categoryName}
             categories={categories}
-            productCount={`${products.length} Products`}
+            eventCount={`${events.length} Events`}
           />
           <Events events={events} />
           <Pagination />

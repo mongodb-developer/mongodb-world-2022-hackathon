@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import * as Realm from "realm-web";
 import Category from "../components/Category";
 import Container from "../components/Container";
 import Footer from "../components/Footer";
@@ -43,7 +42,7 @@ export default function Home({ mapboxAccessToken, categories, heatmapData }) {
           <Category
             category="Recent Events"
             categories={categories}
-            productCount={`${events.length} Events`}
+            eventCount={`${events.length} Events`}
           />
           <Events events={events} />
           <Pagination page={page} limit={limit} />
