@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import * as Realm from "realm-web";
 import {
   MenuIcon,
   SearchIcon,
@@ -75,12 +74,6 @@ const Header = () => {
             <div className="flex flex-col sm:flex-row">
               <div className="mt-3 text-gray-600 hover:underline sm:mx-3 sm:mt-0">
                 <Link href="/">Home</Link>
-              </div>
-              <div
-                className="mt-3 text-gray-600 hover:underline sm:mx-3 sm:mt-0"
-                href="#"
-              >
-                <Link href="/products/category">Categories</Link>
               </div>
               <a
                 className="mt-3 text-gray-600 hover:underline sm:mx-3 sm:mt-0"

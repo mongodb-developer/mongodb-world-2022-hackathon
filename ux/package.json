@@ -11,8 +11,7 @@
     "mongodb": "^4.5.0",
     "next": "latest",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "realm-web": "^1.7.0"
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.4",

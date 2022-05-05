@@ -102,14 +102,6 @@ export async function getServerSideProps(context) {
                 }
             }
         ]).toArray();
-        
-        // Hack for removing duplicate news items client side
-        // events = events.reduce((unique, o) => {
-        //     if(!unique.some(obj => obj.SourceURL === o.SourceURL)) {
-        //         unique.push(o);
-        //     }
-        //     return unique;
-        // }, []);
 
         return {
             props: {
