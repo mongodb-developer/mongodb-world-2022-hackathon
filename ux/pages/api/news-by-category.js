@@ -7,7 +7,7 @@ export default async function newsByCategory(request, response) {
     const page = request.query.page ? parseInt(request.query.page) : 0;
     const limit = request.query.limit ? parseInt(request.query.limit) : 25;
 
-    const results = await collection
+    let results = await collection
         .find(
             {
                 "Info": { "$exists": true },
@@ -26,6 +26,14 @@ export default async function newsByCategory(request, response) {
         .skip(page * limit)
         .limit(limit)
         .toArray();
+
+    // Hack for removing duplicate news items client side
+    results = results.reduce((unique, o) => {
+        if (!unique.some(obj => obj.SourceURL === o.SourceURL)) {
+            unique.push(o);
+        }
+        return unique;
+    }, []);
 
     response.status(200).json(results);
 }

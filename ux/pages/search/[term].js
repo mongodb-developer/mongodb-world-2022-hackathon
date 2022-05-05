@@ -35,7 +35,7 @@ export default function Home() {
         <Header />
         <Container>
           <Category
-            category={query.term}
+            category={`Search Term: ${query.term}`}
             eventCount={`${events.length} Events`}
           />
           <Events events={events} />

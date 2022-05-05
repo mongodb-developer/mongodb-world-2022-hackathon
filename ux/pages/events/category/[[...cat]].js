@@ -38,7 +38,7 @@ export default function Home() {
         <Header />
         <Container>
           <Category
-            category={categoryName}
+            category={`Category: ${categoryName}`}
             categories={categories}
             eventCount={`${events.length} Events`}
           />

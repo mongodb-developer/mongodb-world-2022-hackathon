@@ -4,7 +4,7 @@ export default async function search(request, response) {
     const { database } = await connectToDatabase();
     const collection = database.collection(process.env.NEXT_ATLAS_COLLECTION);
 
-    const results = await collection.aggregate(
+    let results = await collection.aggregate(
         [
             {
                 '$search': {
@@ -28,6 +28,14 @@ export default async function search(request, response) {
             }
         ]
     ).toArray();
+
+    // Hack for removing duplicate news items client side
+    results = results.reduce((unique, o) => {
+        if (!unique.some(obj => obj.SourceURL === o.SourceURL)) {
+            unique.push(o);
+        }
+        return unique;
+    }, []);
 
     response.status(200).json(results);
 }
