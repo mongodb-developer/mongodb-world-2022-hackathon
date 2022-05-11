@@ -7,12 +7,32 @@ export default async function news(request, response) {
     const page = request.query.page ? parseInt(request.query.page) : 0;
     const limit = request.query.limit ? parseInt(request.query.limit) : 25;
 
+    const lat = parseFloat(request.query.lat);
+    const lng = parseFloat(request.query.lng);
+
+    let filter = {
+        "Info": { "$exists": true },
+        "Year": 2022
+    };
+
+    if(lat && lng) {
+        filter = {
+            ...filter,
+           "Action.Location": { 
+               "$near": {
+                    "$geometry": {
+                        "type": "Point",
+                        "coordinates": [lng, lat]
+                    },
+                    "$maxDistance": 100000
+                }
+            }
+        }
+    }
+
     let results = await collection
         .find(
-            {
-                "Info": { "$exists": true },
-                "Year": 2022
-            }
+            filter
         )
         .project({
             "_id": 1,

@@ -1,8 +1,11 @@
 import React, { useRef, useEffect } from "react";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from "!mapbox-gl";
+import { useRouter } from "next/router";
 
 const Hero = ({ mapboxAccessToken, heatmapData }) => {
+
+    const router = useRouter();
 
   mapboxgl.accessToken = mapboxAccessToken;
 
@@ -30,6 +33,12 @@ const Hero = ({ mapboxAccessToken, heatmapData }) => {
             },
             "waterway-label"
         )
+    });
+    map.current.on("click", (e) => {
+        router.push({
+            pathname: `/events`,
+            query: { lat: e.lngLat.lat, lng: e.lngLat.lng }
+        });
     });
   });
 
