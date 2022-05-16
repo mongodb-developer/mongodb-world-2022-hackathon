@@ -26,12 +26,12 @@ export default function Home() {
   }, [query]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+    <div className="flex flex-col items-center justify-center min-h-screen">
       <Head>
         <title>GDELT Hackathon UX</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="bg-white w-full min-h-screen">
+          <div className="bg-white w-full min-h-screen flex flex-col">
         <Header />
         <Container>
           <Category
@@ -39,7 +39,7 @@ export default function Home() {
             eventCount={`${events.length} Events`}
           />
           <Events events={events} />
-          <Pagination />
+          {/* <Pagination /> */}
         </Container>
         <Footer />
       </div>

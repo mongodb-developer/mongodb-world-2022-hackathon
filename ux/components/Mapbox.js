@@ -16,7 +16,7 @@ const Hero = ({ mapboxAccessToken, heatmapData }) => {
     if(map.current) return;
     map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: "mapbox://styles/mapbox/dark-v10",
+        style: "mapbox://styles/mapbox/streets-v11",
         center: [-20.67, 34.5994],
         zoom: 2
     });

@@ -30,12 +30,12 @@ export default function Home({ mapboxAccessToken, categories, heatmapData }) {
     }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+    <div className="flex flex-col items-center justify-center min-h-screen">
       <Head>
         <title>GDELT Hackathon UX</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="bg-white w-full min-h-screen">
+          <div className="bg-white w-full min-h-screen flex flex-col">
         <Header />
         <Container>
           <Mapbox mapboxAccessToken={mapboxAccessToken} heatmapData={heatmapData} />

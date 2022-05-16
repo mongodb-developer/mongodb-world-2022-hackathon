@@ -8,7 +8,7 @@ export default async function search(request, response) {
         [
             {
                 '$search': {
-                    'index': 'news',
+                    'index': 'news_search',
                     'text': {
                         'query': request.query.query,
                         'path': [

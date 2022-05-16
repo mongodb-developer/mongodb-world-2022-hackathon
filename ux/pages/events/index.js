@@ -17,22 +17,24 @@ export default function Home() {
     const lng = parseFloat(query.lng);
 
     useEffect(() => {
-        (async () => {
-            try {
-                setEvents(await fetch(`/api/news?lat=${lat}&lng=${lng}`).then(response => response.json()));
-            } catch (e) {
-                console.error(e);
-            }
-        })();
+        if(lat && lng) {
+            (async () => {
+                try {
+                    setEvents(await fetch(`/api/news?lat=${lat}&lng=${lng}`).then(response => response.json()));
+                } catch (e) {
+                    console.error(e);
+                }
+            })();
+        }
     }, [query]);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen py-2">
+        <div className="flex flex-col items-center justify-center min-h-screen">
             <Head>
                 <title>GDELT Hackathon UX</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className="bg-white w-full min-h-screen">
+            <div className="bg-white w-full min-h-screen flex flex-col">
                 <Header />
                 <Container>
                     <Category
