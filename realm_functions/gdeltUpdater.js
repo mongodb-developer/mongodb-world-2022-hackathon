@@ -11,7 +11,7 @@ exports = async function(){
   const latestCSV = (await http.get({ url: csvURL })).body;
   const zip = new AdmZip(new Buffer(latestCSV.toBase64(), 'base64'));
   const csvData = zip.getEntries()[0].getData().toString('utf-8');
-  const csvLines = csvData.split("/n");
+  const csvLines = csvData.split("\n");
   
   if (csvLines[csvLines.length - 1] === "") {
     csvLines.pop();
