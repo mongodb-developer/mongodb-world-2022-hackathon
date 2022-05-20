@@ -106,7 +106,7 @@ export async function getServerSideProps(context) {
         return {
             props: {
                 isConnected: true,
-                mapboxAccessToken: process.env.MAPBOX_ACCESS_TOKEN,
+                mapboxAccessToken: process.env.NEXT_MAPBOX_ACCESS_TOKEN,
                 categories: JSON.parse(JSON.stringify(categories[0].Categories)),
                 heatmapData: JSON.parse(JSON.stringify(heatmap[0])),
             },
